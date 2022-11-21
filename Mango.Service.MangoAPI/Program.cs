@@ -1,3 +1,5 @@
+using AutoMapper;
+using Mango.Service.MangoAPI;
 using Mango.Service.MangoAPI.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +11,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Path"));
 });
+
+//IMapper mapper = MapperConfiguration.RegisterMaps().CreateMapper();
+
+#region Adding AutoMapper
+var mappingConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingConfiguration());
+});
+var mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+#endregion
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
